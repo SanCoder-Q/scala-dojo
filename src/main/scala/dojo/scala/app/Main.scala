@@ -7,7 +7,7 @@ import akka.http.scaladsl.server.Route
 import scala.concurrent.Future
 import scala.io.StdIn
 
-object Main extends App with Servable {
+object Main extends App with Servable with ServerConfig {
   val server = start()
   println(s"Server online at http://$interface:$port/")
   println("Press RETURN to stop...")
