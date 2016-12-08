@@ -12,7 +12,7 @@ object ServableSpec extends Specification with AkkaConfig {
   "start" should {
     "response correct when send a request" in {
       val randomPort = Gen.chooseNum[Int](2000, 60000).sample.get
-      val servable = new Servable {
+      val servable = new Servable with AkkaConfig {
         override val port = randomPort
         def handler: (HttpRequest) => Future[HttpResponse] = ???
       }
