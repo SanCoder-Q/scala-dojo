@@ -2,6 +2,8 @@ package dojo.scala.app.model
 
 import cats.~>
 
+import scala.language.higherKinds
+
 sealed trait AppAction[A] {
   def map[B](f: A => B): AppAction[B] = this match {
     case GetRandomIntAction(min, max, onResult) =>

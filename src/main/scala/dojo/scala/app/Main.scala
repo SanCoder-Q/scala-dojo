@@ -11,7 +11,7 @@ import scala.io.StdIn
 
 object Main extends App with AkkaConfig with Servable with ServerConfig {
   implicit val interpreter: AppActionInterpreter = new AppActionInterpreter()
-  val route: Route = new AppRoute().route
+  val route: Route = new AppRoute[Future]().route
 
   val server = start()
   println(s"Server online at http://$interface:$port/")
