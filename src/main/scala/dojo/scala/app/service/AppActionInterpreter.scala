@@ -1,30 +1,14 @@
 package dojo.scala.app.service
-import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.HttpRequest
-import akka.stream.Materializer
-import akka.util.ByteString
-
-import cats.{Id, ~>}
-import dojo.scala.app.model.{GetRandomIntAction, AppAction}
+import cats.~>
+import dojo.scala.app.api.RandomClient
+import dojo.scala.app.model.{AppAction, GetRandomIntAction}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Random
 
-class AppActionInterpreter(implicit ec: ExecutionContext,
-                            as: ActorSystem,
-                            mz: Materializer) extends (AppAction ~> Future) {
+class AppActionInterpreter(rClient: RandomClient)(implicit ec: ExecutionContext) extends (AppAction ~> Future) {
 
   override def apply[A](action: AppAction[A]): Future[A] = action match {
-    case GetRandomIntAction(min, max, onResult) => {
-      val host = "https://www.random.org/integers/"
-      val params = s"num=1&min=$min&max=$max&col=1&base=10&format=plain&rnd=new"
-      for {
-        resp <- Http().singleRequest(HttpRequest(uri = s"$host?$params"))
-        byte <- resp.entity.dataBytes.runFold(ByteString(""))(_ ++ _)
-        body = byte.utf8String
-        integer  = body.trim.toInt
-      } yield onResult(integer)
-    }
+    case GetRandomIntAction(min, max, onResult) =>
+      rClient.generateRandomNum(min, max) map onResult
   }
 }

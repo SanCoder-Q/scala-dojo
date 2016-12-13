@@ -1,8 +1,8 @@
 package dojo.scala.app
 
-import akka.http.scaladsl.marshalling.ToResponseMarshallable
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
 import akka.http.scaladsl.server.Route
+import dojo.scala.app.api.{RandomClient, HttpClient}
 import dojo.scala.app.route.AppRoute
 import dojo.scala.app.service.AppActionInterpreter
 
@@ -10,7 +10,8 @@ import scala.concurrent.Future
 import scala.io.StdIn
 
 object Main extends App with AkkaConfig with Servable with ServerConfig {
-  implicit val interpreter: AppActionInterpreter = new AppActionInterpreter()
+  val randomClient = new RandomClient(new HttpClient())
+  implicit val appInterpreter = new AppActionInterpreter(randomClient)
   val route: Route = new AppRoute[Future]().route
 
   val server = start()
