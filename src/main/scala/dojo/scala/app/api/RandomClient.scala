@@ -22,6 +22,11 @@ class RandomClient(httpClient: HttpRequest => Future[HttpResponse])
     body <- getBodyFromUri(uri = s"$h/integers/?$params")
   } yield body.trim.toInt
 
+  def getCurrentQuota: MyReader[Int] = for {
+    h <- apiHost
+    body <- getBodyFromUri(s"$h/quota/?format=plain")
+  } yield body.trim.toInt
+
   private def getBodyFromUri(uri: String): MyReader[String] =
     for {
       resp <- lift(httpClient(HttpRequest(uri = uri)))

@@ -11,7 +11,7 @@ sealed trait AppAction[A] {
   }
 }
 
-case class GetRandomIntAction[A](min: Int, max: Int, onResult: Int => A) extends AppAction[A]
+case class GetRandomIntAction[A](min: Int, max: Int, onResult: Option[Int] => A) extends AppAction[A]
 
 object AppAction {
   implicit class RunableAppAction[A](action: AppAction[A]) {

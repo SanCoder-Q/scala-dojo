@@ -6,6 +6,7 @@ import dojo.scala.app.api.{RandomClient, HttpClient}
 import dojo.scala.app.model.AppConfig
 import dojo.scala.app.route.AppRoute
 import dojo.scala.app.service.AppActionInterpreter
+import akka.http.scaladsl.marshalling.PredefinedToEntityMarshallers._
 
 import scala.concurrent.Future
 import scala.io.StdIn

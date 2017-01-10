@@ -11,7 +11,7 @@ import dojo.scala.app.model.{AppConfig, AppAction}
 import scala.language.higherKinds
 
 class AppRoute[M[_]](config: AppConfig)(implicit interpreter: AppAction ~> ReaderT[M, AppConfig, ?],
-                     marshaller: ToResponseMarshaller[M[String]]) {
+                     marshaller: ToResponseMarshaller[M[(Int, String)]]) {
 
   def route: Route = get {
     parameters("min".as[Int], "max".as[Int]) { (min, max) =>
